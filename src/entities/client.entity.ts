@@ -1,4 +1,6 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { ClientDto } from "src/dtos/client.dto";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Address } from "./address.entity";
 
 @Entity()
 export class Client extends BaseEntity {
@@ -11,39 +13,40 @@ export class Client extends BaseEntity {
     @Column({type: "float"})
     public rate: number;
 
-    @Column({nullable: true})
-    public contactName?: string;
+    @Column()
+    public contactName: string;
 
-    @Column({nullable: true})
-    public contactEmail?: string;
+    @Column()
+    public contactEmail: string;
 
     @Column()
     public phone: string;
 
-    @Column()
-    public billingAddress: string;
+    @ManyToOne(() => Address, {eager: true})
+    public billingAddress: Address;
 
-    @Column()
-    public billingState: string;
+    @ManyToOne(() => Address, {eager: true})
+    public shippingAddress: Address;
 
-    @Column()
-    public billingCity: string;
+    public async updateFromDTO(req: ClientDto) {
+        this.name = req.name;
+        this.rate = req.rate;
+        this.contactName = req.contactName;
+        this.contactEmail = req.contactEmail;
+        this.phone = req.phone;
+        this.billingAddress = this.billingAddress ? 
+            await this.billingAddress.updateFromDTO(req.billingAddress) : 
+            await Address.fromDTO(req.billingAddress);
+        this.shippingAddress = this.shippingAddress ?
+            await this.shippingAddress.updateFromDTO(req.shippingAddress) :
+            await Address.fromDTO(req.shippingAddress);
+        await this.save();
+        return this;
+    }
 
-    @Column()
-    public billingAreaCode: string;
-
-    @Column({type: "bool", default: false})
-    public shippingSameAsBilling: boolean;
-
-    @Column({nullable: true})
-    public shippingAddress: string;
-
-    @Column({nullable: true})
-    public shippingState: string;
-
-    @Column({nullable: true})
-    public shippingCity: string;
-
-    @Column({nullable: true})
-    public shippingAreaCode: string;
+    public static async FromDTO(req: ClientDto) {
+        const client = new Client();
+        await client.updateFromDTO(req);
+        return client;
+    }
 }

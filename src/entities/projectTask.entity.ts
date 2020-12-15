@@ -15,7 +15,7 @@ export class ProjectTask extends BaseEntity {
     @Column({type: "float"})
     public estimatedHours: number;
 
-    @Column({type: "float", nullable: true})
+    @Column({type: "float", default: 0})
     public actualHours: number;
 
 }
