@@ -23,7 +23,7 @@ export class ClientController {
 
     @Put(":id")
     public async updateClient(@Param("id") id: string, @Body() req: ClientDto) {
-        return (await Client.findOneOrFail(id)).updateFromDTO(req);
+        return await (await Client.findOneOrFail(id)).updateFromDTO(req);
     }
 
     @Delete(":id")

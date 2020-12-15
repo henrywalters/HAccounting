@@ -36,21 +36,21 @@ export class Project extends BaseEntity {
     @ManyToOne(type => Client)
     public client: Client;
 
-    @OneToMany(type => ProjectTask, task => task.project)
+    @OneToMany(type => ProjectTask, task => task.project, {eager: true})
     public tasks: ProjectTask[];
 
-    public async updateFromDTO(client: Client, req: ProjectDto) {
+    public async updateFromDTO(req: ProjectDto, client: Client = null) {
         this.name = req.name;
         this.description = req.description;
         this.status = req.status;
-        this.client = client;
+        if (client) this.client = client;
         await this.save();
         return this;
     }
 
     public static async FromDTO(client: Client, req: ProjectDto) {
         const project = new Project();
-        await project.updateFromDTO(client, req);
+        await project.updateFromDTO(req, client);
         return project;
     }
 }

@@ -5,6 +5,8 @@ import {ConfigModule} from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import {getConnection} from "typeorm";
 import { ClientController } from './controllers/client.controller';
+import { ProjectController } from './controllers/project.controller';
+import { ProjectTaskController } from './controllers/projectTask.controller';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { ClientController } from './controllers/client.controller';
   controllers: [
     AppController,
     ClientController,
+    ProjectController,
+    ProjectTaskController,
   ],
   providers: [AppService],
 })
