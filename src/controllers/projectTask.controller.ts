@@ -3,7 +3,7 @@ import { ProjectTaskDto } from "src/dtos/projectTask.dto";
 import { Project } from "src/entities/project.entity";
 import { ProjectTask } from "src/entities/projectTask.entity";
 
-@Controller("v1/project-task")
+@Controller("v1/project-tasks")
 export class ProjectTaskController {
     @Get()
     public async getTasks() {

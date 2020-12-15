@@ -4,7 +4,7 @@ import { ProjectDto } from "src/dtos/project.dto";
 import { Client } from "src/entities/client.entity";
 import { Project } from "src/entities/project.entity";
 
-@Controller("v1/client")
+@Controller("v1/clients")
 export class ClientController {
     @Get()
     public async getClients() {

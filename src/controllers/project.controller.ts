@@ -7,7 +7,7 @@ import { Client } from "src/entities/client.entity";
 import { Project } from "src/entities/project.entity";
 import { ProjectTask } from "src/entities/projectTask.entity";
 
-@Controller("v1/project")
+@Controller("v1/projects")
 export class ProjectController {
 
     @Get()
