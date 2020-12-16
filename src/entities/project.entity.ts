@@ -15,6 +15,9 @@ export class Project extends BaseEntity {
     @PrimaryGeneratedColumn("uuid")
     public id: string;
 
+    @Column({type: "int"})
+    public clientProjectId: number;
+
     @CreateDateColumn()
     public createdOn: Date;
 
@@ -33,7 +36,7 @@ export class Project extends BaseEntity {
     @Column({type: "enum", enum: ProjectStatus})
     public status: ProjectStatus;
 
-    @ManyToOne(type => Client)
+    @ManyToOne(type => Client, {eager: true})
     public client: Client;
 
     @OneToMany(type => ProjectTask, task => task.project, {eager: true})
@@ -50,6 +53,11 @@ export class Project extends BaseEntity {
 
     public static async FromDTO(client: Client, req: ProjectDto) {
         const project = new Project();
+        project.clientProjectId = await Project.count({
+            where: {
+                client,
+            }
+        });
         await project.updateFromDTO(req, client);
         return project;
     }

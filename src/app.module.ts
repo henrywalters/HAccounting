@@ -7,6 +7,7 @@ import {getConnection} from "typeorm";
 import { ClientController } from './controllers/client.controller';
 import { ProjectController } from './controllers/project.controller';
 import { ProjectTaskController } from './controllers/projectTask.controller';
+import { PDFModule } from '@t00nday/nestjs-pdf';
 
 @Module({
   imports: [
@@ -14,6 +15,12 @@ import { ProjectTaskController } from './controllers/projectTask.controller';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(),
+    PDFModule.register({
+      view: {
+        root: process.cwd() + '/templates',
+        engine: 'handlebars',
+      }
+    })
   ],
   controllers: [
     AppController,

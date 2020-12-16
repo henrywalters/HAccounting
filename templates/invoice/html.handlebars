@@ -1,0 +1,55 @@
+<html>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h1>Invoice</h1>
+                </div>
+                <div class="col-xs-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <p><b>Bill to:</b></p>
+                    <h3>{{project.client.name}}</h3>
+                    <p>{{project.client.contactName}}</p>
+                    <p>{{project.client.contactEmail}}</p>
+                    <p>{{project.client.billingAddress.address}}</p>
+                    <p>{{project.client.billingAddress.city}} {{project.client.billingAddress.state}}, {{project.client.billingAddress.areaCode}}</p>
+                </div>
+                <div class="col-xs-6" style="text-align: right">
+                    <p><b>Invoice ID: </b> {{project.clientProjectId}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Sub-Total</th>
+                    </thead>
+                    <tbody>
+                        {{#each items}}
+                            <tr>
+                                <td>{{this.name}}</td>
+                                <td>{{this.description}}</td>
+                                <td>{{this.actualHours}}</td>
+                                <td>${{project.client.rate}}</td>
+                                <td>${{this.subTotal}}</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+
+                </div>
+                <div class="col-xs-6">
+                    <h3><ul>Total Amount:</ul> <b>${{total}}</b></h3>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
