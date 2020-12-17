@@ -1,4 +1,4 @@
-import { Delete, HttpCode, Param, Post, Put, Res } from "@nestjs/common";
+import { Delete, HttpCode, Param, Post, Put, Render, Res } from "@nestjs/common";
 import { Header } from "@nestjs/common";
 import { Get } from "@nestjs/common";
 import { Body } from "@nestjs/common";
@@ -27,6 +27,27 @@ export class ProjectController {
         return await Project.findOneOrFail(id);
     }
 
+    @Get(":id/invoice/web")
+    @Render("invoice.html")
+    public async getProjectInvoiceWeb(@Param("id") id: string) {
+        const project = await Project.findOneOrFail(id);
+        const items = project.tasks.map((item) => { return {
+            ...item,
+            subTotal: item.actualHours * project.client.rate
+        }});
+        let total = 0
+        for (const item of items) {
+            total += item.subTotal;
+        }
+        return {
+            locals: {
+                project,
+                items,
+                total,    
+            }
+        }
+    }    
+
     @Get(":id/invoice")
     public async getProjectInvoice(@Param("id") id: string, @Res() res: Response) {
         const project = await Project.findOneOrFail(id);
@@ -38,13 +59,7 @@ export class ProjectController {
         for (const item of items) {
             total += item.subTotal;
         }
-        const buffer = await this.pdfService.toBuffer('invoice', {
-            locals: {
-                project,
-                items,
-                total,    
-            }
-        }).toPromise();
+        const buffer = await this.pdfService.toBuffer('invoice', ).toPromise();
         const invoiceId = project.clientProjectId;
         const invoiceName = `invoice_#${invoiceId}.pdf`;
 
